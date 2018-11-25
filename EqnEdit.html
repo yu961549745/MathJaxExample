@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>公式编辑测试</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- UIkit -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/css/uikit.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.23/js/uikit-icons.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript">
+        window.MathJax = {
+            extensions: ["tex2jax.js"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [
+                    ['$', '$'],
+                    ["\\(", "\\)"]
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ["\\[", "\\]"]
+                ],
+                processEscapes: true
+            },
+            "HTML-CSS": {
+                fonts: ["TeX"],
+                linebreaks: {
+                    automatic: true
+                }
+            },
+            skipStartupTypeset: true,
+            messageStyle: "none",
+            showMathMenu: false
+        };
+    </script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+
+    <style type="text/css">
+        #edit {
+            height: 2000px;
+        }
+        
+        #preview {
+            height: 2000px;
+        }
+    </style>
+
+    <script>
+        var content = '\
+Shift+Enter 更新预览\n\n\
+行内公式写法1: $x+y=0$\n\
+行内公式写法2: \\(x+y=0\\)\n\
+独立公式写法1:\n\
+\\[x+y=0\\]\n\
+独立公式写法2:\n\
+$$x+y=0$$\n\
+长公式测试\n\
+\\begin{equation}\n\
+\\begin{split}\n\
+0&=x+y\\\\\n\
+  &=a+b\n\
+\\end{split}\n\
+\\end{equation}'
+
+        function makePreview() {
+            var obj = $('#preview').text($('#edit').val());
+            obj.html(obj.html().replace(/\n/g, '<br/>'));
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "preview"]);
+        }
+        $(function() {
+            $('#edit').keydown(function(e) {
+                if (e.keyCode == 13 && e.shiftKey == 1) {
+                    makePreview();
+                    e.preventDefault();
+                }
+            });
+            $('#edit').text(content);
+            makePreview();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="uk-column-1-2">
+        <textarea id="edit" class="uk-textarea"></textarea>
+        <div id="preview"></div>
+    </div>
+</body>
+
+</html>
